@@ -34,6 +34,18 @@ download:
 	cd ${PKGDIR}; ./autogen.sh; make dist
 	mv ${PKGDIR}/${PKGSRC} ${PKGSRC}
 
+
+.PHONY: upload
+upload: ${DEBS}
+	umount /pve/${RELEASE}; mount /pve/${RELEASE} -o rw
+	mkdir -p /pve/${RELEASE}/extra
+	rm -f /pve/${RELEASE}/extra/Packages*
+	rm -f /pve/${RELEASE}/extra/${PACKAGE}1_*.deb
+	rm -f /pve/${RELEASE}/extra/${PACKAGE}-dev_*.deb
+	cp ${DEBS} /pve/${RELEASE}/extra
+	cd /pve/${RELEASE}/extra; dpkg-scanpackages . /dev/null > Packages; gzip -9c Packages > Packages.gz
+	umount /pve/${RELEASE}; mount /pve/${RELEASE} -o ro
+
 distclean: clean
 
 .PHONY: clean
