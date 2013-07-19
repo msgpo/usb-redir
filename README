@@ -1,0 +1,2 @@
+This is a simple backport of the original debian packages to wheezy, but
+we use the latest usbredir sources from git.
